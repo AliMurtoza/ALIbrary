@@ -11,4 +11,13 @@
     <ProjectReference Include="..\ALIbrary.Domain\ALIbrary.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Configurations\" />
+    <Folder Include="Identity\" />
+    <Folder Include="Migrations\" />
+    <Folder Include="Seed\" />
+    <Folder Include="Repositories\" />
+    <Folder Include="Persistence\" />
+  </ItemGroup>
+
 </Project>
