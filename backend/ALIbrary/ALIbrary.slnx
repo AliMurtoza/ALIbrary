@@ -1,1 +1,7 @@
-<Solution />
+<Solution>
+  <Project Path="../src/ALIbrary.Application/ALIbrary.Application.csproj" />
+  <Project Path="../src/ALIbrary.Domain/ALIbrary.Domain.csproj" />
+  <Project Path="../src/ALIbrary.Infrastructure/ALIbrary.Infrastructure.csproj" />
+  <Project Path="../tests/ALIbrary.Tests/ALIbrary.Tests.csproj" />
+  <Project Path="ALIbrary.api/ALIbrary.api.csproj" />
+</Solution>
