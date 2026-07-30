@@ -11,13 +11,16 @@ public class AuthenticationService : IAuthenticationService
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ApplicationDbContext _context;
+    private readonly IJwtTokenService _jwtTokenService;
 
     public AuthenticationService(
         UserManager<ApplicationUser> userManager, 
-        ApplicationDbContext context)
+        ApplicationDbContext context,
+        IJwtTokenService jwtTokenService)
     {
         _userManager = userManager;
         _context = context;
+        _jwtTokenService = jwtTokenService;
     }
 
     public async Task<AuthenticationResponse> RegisterAsync(RegisterRequest request)
@@ -60,8 +63,30 @@ public class AuthenticationService : IAuthenticationService
         };
     }
 
-    public Task<AuthenticationResponse> LoginAsync(LoginRequest request)
+    public async Task<AuthenticationResponse> LoginAsync(LoginRequest request)
     {
-        throw new NotImplementedException();
+        var user = await _userManager.FindByEmailAsync(request.Email);
+
+        if (user == null)
+        {
+            throw new Exception("Invalid email or password.");
+        }
+
+        var isPasswordValid = await _userManager.CheckPasswordAsync(user, request.Password);
+
+        if (!isPasswordValid)
+        {
+            throw new Exception("Invalid email or password.");
+        }
+
+        var token = _jwtTokenService.GenerateToken(
+            user.Id,
+            user.Email!);
+
+        return new AuthenticationResponse
+        {
+            Token = token,
+            ExpiresAt = DateTime.UtcNow.AddHours(1)
+        };
     }
 }
