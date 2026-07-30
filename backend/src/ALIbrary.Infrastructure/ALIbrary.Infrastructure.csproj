@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <Folder Include="Configurations\" />
-    <Folder Include="Identity\" />
     <Folder Include="Migrations\" />
     <Folder Include="Seed\" />
     <Folder Include="Repositories\" />
@@ -21,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.29" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.29" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.29">
       <PrivateAssets>all</PrivateAssets>
