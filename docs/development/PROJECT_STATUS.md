@@ -5,8 +5,8 @@
 🟩 Repository Setup         ✅
 🟩 Solution Structure       ✅
 🟩 Architecture & Design    ✅
-🟨 Domain Implementation    In Progress
-⬜ Database Configuration
+🟩 Domain Model             ✅
+🟩 Database                 ✅
 ⬜ Authentication
 ⬜ Library Features
 ⬜ User Features
@@ -18,10 +18,10 @@
 
 ## Current Focus
 
-Implementing the domain model and Entity Framework Core configuration.
+Implementing authentication and authorization.
 
 ---
 
 ## Next Step
 
-Create domain entities, configure relationships, and generate the initial database migration.
+Integrate ASP.NET Core Identity and JWT authentication.

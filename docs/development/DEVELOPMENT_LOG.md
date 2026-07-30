@@ -6,11 +6,11 @@
 
 **Date:** July 29, 2026
 
-**Duration:** ~6–8 hours
+**Duration:** ~1–2 hours
 
 ## Objectives
 
-Establish the project foundation, define the architecture, and prepare the development environment.
+Initialize the project and establish the development foundation.
 
 ---
 
@@ -18,61 +18,76 @@ Establish the project foundation, define the architecture, and prepare the devel
 
 ### Repository & Solution
 
-- Created the GitHub repository and initialized the project.
+- Initialized the GitHub repository.
 - Established the monorepo structure.
 - Created the backend solution.
-- Added the following projects:
-  - ALIbrary.Api
-  - ALIbrary.Application
-  - ALIbrary.Domain
-  - ALIbrary.Infrastructure
-- Targeted .NET 8 LTS across the solution.
+- Added the API, Application, Domain, Infrastructure, and Tests projects.
+- Targeted .NET 8 LTS.
 - Configured project references.
-
-### Project Setup
-
-- Installed required NuGet packages.
-- Configured Dependency Injection.
-- Updated application configuration.
-- Verified the application builds successfully.
-- Configured Swagger.
-
-### Database
-
-- Installed PostgreSQL.
-- Installed pgAdmin 4.
-- Created the `ALIbraryDb` database.
-- Verified the local PostgreSQL environment.
-
-### Documentation
-
-- Established the documentation structure.
-- Created architecture and development documentation.
-- Defined engineering principles.
-- Recorded architecture decisions (ADRs).
-- Created the project plan.
-- Designed and finalized the domain model.
-- Established project documentation standards.
-
-### Architecture
-
-- Adopted Clean Architecture.
-- Finalized the core domain model.
-- Defined entity relationships.
-- Introduced the UserBook aggregate.
-- Introduced ReadingProgress.
-- Included Bookshelves as a Version 1 feature.
-- Declared a feature freeze to prevent unnecessary scope expansion.
 
 ---
 
 ## Key Decisions
 
 - Use .NET 8 LTS.
-- Use PostgreSQL.
-- Follow Clean Architecture.
+- Adopt Clean Architecture.
+- Organize the project as a modular monorepo.
+
+---
+
+# Session 2
+
+**Date:** July 30, 2026
+
+**Duration:** ~8–10 hours
+
+## Objectives
+
+Complete the backend foundation, finalize the domain model, and establish the database layer.
+
+---
+
+## Completed
+
+### Project Setup
+
+- Installed required NuGet packages.
+- Configured Dependency Injection.
+- Configured application settings.
+- Configured Swagger.
+- Verified successful solution builds.
+
+### Database
+
+- Installed PostgreSQL and pgAdmin 4.
+- Created the `ALIbraryDb` database.
+- Configured Entity Framework Core.
+- Implemented Fluent API configurations.
+- Generated the initial migration.
+- Successfully created the PostgreSQL schema.
+
+### Architecture & Domain
+
+- Finalized the Version 1 domain model.
+- Implemented all domain entities.
+- Configured entity relationships.
+- Introduced UserBook, ReadingProgress, and Bookshelves.
+- Declared a Version 1 feature freeze.
+
+### Documentation
+
+- Established the project documentation structure.
+- Recorded architecture decisions.
+- Defined engineering principles.
+- Created the project plan, ERD, and system design documents.
+- Updated project documentation to reflect implementation progress.
+
+---
+
+## Key Decisions
+
+- Use PostgreSQL with Entity Framework Core.
 - Use Repository Pattern with Dependency Injection.
 - Separate `Book` from `BookCopy`.
-- Model user interactions through `UserBook`.
-- Keep `ReadingProgress` as a separate entity.
-- Reserve future enhancements for the roadmap instead of Version 1.
+- Model personal reading through `UserBook`.
+- Freeze the Version 1 domain model before feature development.
