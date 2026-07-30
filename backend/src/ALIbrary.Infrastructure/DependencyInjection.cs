@@ -1,4 +1,4 @@
-using ALIbrary.Infrastructure.Persistence;
+using ALIbrary.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
