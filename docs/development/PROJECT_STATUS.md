@@ -4,26 +4,24 @@
 
 🟩 Repository Setup         ✅
 🟩 Solution Structure       ✅
-🟨 Architecture Design      In Progress
-⬜ Database Design
+🟩 Architecture & Design    ✅
+🟨 Domain Implementation    In Progress
+⬜ Database Configuration
 ⬜ Authentication
-⬜ Books
-⬜ Members
-⬜ Borrowing
-⬜ Reservations
-⬜ Reports
+⬜ Library Features
+⬜ User Features
 ⬜ Frontend
 ⬜ Testing
-⬜ Documentation
+⬜ Documentation Review
 
 ---
 
-Current Focus
+## Current Focus
 
-Designing the domain model and project architecture.
+Implementing the domain model and Entity Framework Core configuration.
 
 ---
 
-Next Step
+## Next Step
 
-Configure project references and create the initial ERD.
+Create domain entities, configure relationships, and generate the initial database migration.
