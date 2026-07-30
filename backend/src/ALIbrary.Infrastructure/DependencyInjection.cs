@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ALIbrary.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
+using ALIbrary.Application.Authentication.Interfaces;
+using ALIbrary.Infrastructure.Services;
 
 namespace ALIbrary.Infrastructure.DependencyInjection;
 
@@ -31,6 +33,7 @@ public static class DependencyInjection
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>();
 
+        services.AddScoped<IAuthenticationService, AuthenticationService>();
         return services;
     }
 }
