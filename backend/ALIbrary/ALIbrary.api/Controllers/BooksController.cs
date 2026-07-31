@@ -24,9 +24,10 @@ public class BooksController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll()
+    public async Task<IActionResult> GetAll(
+    [FromQuery] BookQueryParameters query)
     {
-        return Ok(await _bookService.GetAllAsync());
+        return Ok(await _bookService.GetAllAsync(query));
     }
 
     [HttpGet("{id:guid}")]

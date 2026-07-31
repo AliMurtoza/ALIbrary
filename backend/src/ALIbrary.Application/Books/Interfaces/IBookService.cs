@@ -6,7 +6,7 @@ public interface IBookService
 {
     Task<BookResponse> CreateAsync(CreateBookRequest request);
 
-    Task<List<BookResponse>> GetAllAsync();
+    Task<List<BookResponse>> GetAllAsync(BookQueryParameters query);
 
     Task<BookResponse?> GetByIdAsync(Guid id);
 

@@ -40,18 +40,50 @@ public class BookService : IBookService
         };
     }
 
-    public async Task<List<BookResponse>> GetAllAsync()
+    public async Task<List<BookResponse>> GetAllAsync(BookQueryParameters query)
     {
-        return await _context.Books
-            .Select(book => new BookResponse
+        var books = _context.Books
+            .Include(b => b.Category)
+            .Include(b => b.Publisher)
+            .Include(b => b.Language)
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(query.Search))
+        {
+            books = books.Where(b =>
+                b.Title.ToLower().Contains(query.Search.ToLower()) ||
+                b.ISBN.ToLower().Contains(query.Search.ToLower()));
+        }
+
+        if (query.CategoryId.HasValue)
+        {
+            books = books.Where(b => b.CategoryId == query.CategoryId);
+        }
+
+        if (query.PublisherId.HasValue)
+        {
+            books = books.Where(b => b.PublisherId == query.PublisherId);
+        }
+
+        if (query.LanguageId.HasValue)
+        {
+            books = books.Where(b => b.LanguageId == query.LanguageId);
+        }
+
+        books = books
+            .Skip((query.Page - 1) * query.PageSize)
+            .Take(query.PageSize);
+
+        return await books
+            .Select(b => new BookResponse
             {
-                Id = book.Id,
-                Title = book.Title,
-                ISBN = book.ISBN,
-                PublishedYear = book.PublicationYear
+                Id = b.Id,
+                Title = b.Title,
+                ISBN = b.ISBN,
+                PublishedYear = b.PublicationYear
             })
             .ToListAsync();
-    }
+            }
 
     public async Task<BookResponse?> GetByIdAsync(Guid id)
     {
