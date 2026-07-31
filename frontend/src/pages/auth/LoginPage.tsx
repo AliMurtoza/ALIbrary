@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import {
     Button,
@@ -14,8 +15,8 @@ import { login } from "../../services/authService";
 export default function LoginPage() {
 
     const [email, setEmail] = useState("");
-
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
     async function handleLogin() {
 
@@ -31,7 +32,7 @@ export default function LoginPage() {
                 result.token
             );
 
-            alert("Login successful");
+            navigate("/");
 
         } catch {
 

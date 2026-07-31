@@ -1,119 +1,109 @@
-import { Outlet } from "react-router-dom";
-
 import {
-    AppBar,
-    Box,
-    CssBaseline,
-    Drawer,
-    List,
-    ListItem,
-    ListItemButton,
-    ListItemText,
-    Toolbar,
-    Typography,
+  AppBar,
+  Box,
+  Button,
+  CssBaseline,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Toolbar,
+  Typography,
 } from "@mui/material";
+
+import { Outlet, useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
 
 export default function MainLayout() {
+  const navigate = useNavigate();
 
-    return (
-        <Box sx={{ display: "flex" }}>
+  function logout() {
+    localStorage.removeItem("token");
+    navigate("/login");
+  }
 
-            <CssBaseline />
+  return (
+    <Box sx={{ display: "flex" }}>
+      <CssBaseline />
 
-            <AppBar
-                position="fixed"
-                sx={{
-                    zIndex: (theme) => theme.zIndex.drawer + 1,
-                }}
-            >
-                <Toolbar>
+      {/* Top App Bar */}
+      <AppBar
+        position="fixed"
+        sx={{
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+        }}
+      >
+        <Toolbar>
+          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+            ALIbrary
+          </Typography>
 
-                    <Typography variant="h6">
+          <Button color="inherit" onClick={logout}>
+            Logout
+          </Button>
+        </Toolbar>
+      </AppBar>
 
-                        ALIbrary
+      {/* Sidebar */}
+      <Drawer
+        variant="permanent"
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          "& .MuiDrawer-paper": {
+            width: drawerWidth,
+            boxSizing: "border-box",
+          },
+        }}
+      >
+        <Toolbar />
 
-                    </Typography>
+        <List>
+          <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemText primary="Dashboard" />
+            </ListItemButton>
+          </ListItem>
 
-                </Toolbar>
+          <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemText primary="Books" />
+            </ListItemButton>
+          </ListItem>
 
-            </AppBar>
+          <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemText primary="Authors" />
+            </ListItemButton>
+          </ListItem>
 
-            <Drawer
-                variant="permanent"
-                sx={{
-                    width: drawerWidth,
-                    flexShrink: 0,
-                    "& .MuiDrawer-paper": {
-                        width: drawerWidth,
-                        boxSizing: "border-box",
-                    },
-                }}
-            >
+          <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemText primary="Loans" />
+            </ListItemButton>
+          </ListItem>
 
-                <Toolbar />
+          <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemText primary="Reservations" />
+            </ListItemButton>
+          </ListItem>
+        </List>
+      </Drawer>
 
-                <List>
-
-                    <ListItem disablePadding>
-                        <ListItemButton>
-
-                            <ListItemText primary="Dashboard" />
-
-                        </ListItemButton>
-                    </ListItem>
-
-                    <ListItem disablePadding>
-                        <ListItemButton>
-
-                            <ListItemText primary="Books" />
-
-                        </ListItemButton>
-                    </ListItem>
-
-                    <ListItem disablePadding>
-                        <ListItemButton>
-
-                            <ListItemText primary="Authors" />
-
-                        </ListItemButton>
-                    </ListItem>
-
-                    <ListItem disablePadding>
-                        <ListItemButton>
-
-                            <ListItemText primary="Loans" />
-
-                        </ListItemButton>
-                    </ListItem>
-
-                    <ListItem disablePadding>
-                        <ListItemButton>
-
-                            <ListItemText primary="Reservations" />
-
-                        </ListItemButton>
-                    </ListItem>
-
-                </List>
-
-            </Drawer>
-
-            <Box
-                component="main"
-                sx={{
-                    flexGrow: 1,
-                    p: 3,
-                }}
-            >
-
-                <Toolbar />
-
-                <Outlet />
-
-            </Box>
-
-        </Box>
-    );
+      {/* Main Content */}
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: 3,
+        }}
+      >
+        <Toolbar />
+        <Outlet />
+      </Box>
+    </Box>
+  );
 }

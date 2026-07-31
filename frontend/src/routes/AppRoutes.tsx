@@ -1,5 +1,6 @@
 import {
     BrowserRouter,
+    Navigate,
     Route,
     Routes,
 } from "react-router-dom";
@@ -10,7 +11,11 @@ import DashboardPage from "../pages/dashboard/DashboardPage";
 import LoginPage from "../pages/auth/LoginPage";
 import NotFoundPage from "../pages/NotFoundPage";
 
+import ProtectedRoute from "./ProtectedRoute";
+
 export default function AppRoutes() {
+
+    const token = localStorage.getItem("token");
 
     return (
 
@@ -20,13 +25,23 @@ export default function AppRoutes() {
 
                 <Route
                     path="/login"
-                    element={<LoginPage />}
+                    element={
+                        token
+                            ? <Navigate to="/" replace />
+                            : <LoginPage />
+                    }
                 />
 
-                <Route element={<MainLayout />}>
+                <Route
+                    element={
+                        <ProtectedRoute>
+                            <MainLayout />
+                        </ProtectedRoute>
+                    }
+                >
 
                     <Route
-                        index
+                        path="/"
                         element={<DashboardPage />}
                     />
 
