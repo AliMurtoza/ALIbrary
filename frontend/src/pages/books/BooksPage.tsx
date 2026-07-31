@@ -1,90 +1,169 @@
 import { useEffect, useState } from "react";
 
 import {
-    CircularProgress,
-    List,
-    ListItem,
-    ListItemText,
-    Paper,
-    Typography,
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  List,
+  ListItem,
+  ListItemText,
+  Paper,
+  TextField,
+  Typography,
 } from "@mui/material";
+
+import { createBook } from "../../services/bookService";
 
 import { getBooks } from "../../services/bookService";
 
 import { Book } from "../../types/Book";
 
 export default function BooksPage() {
+  const [books, setBooks] = useState<Book[]>([]);
 
-    const [books, setBooks] = useState<Book[]>([]);
+  const [loading, setLoading] = useState(true);
 
-    const [loading, setLoading] = useState(true);
+  const [open, setOpen] = useState(false);
 
-    useEffect(() => {
+  const [title, setTitle] = useState("");
+  const [isbn, setIsbn] = useState("");
+  const [description, setDescription] = useState("");
 
-        async function loadBooks() {
+  const [publisherId, setPublisherId] = useState("");
+  const [languageId, setLanguageId] = useState("");
 
-            try {
+  const [publishedYear, setPublishedYear] = useState(2026);
 
-                const result = await getBooks();
+  async function handleCreate() {
+    await createBook({
+      title,
 
-                setBooks(result);
+      isbn,
 
-            }
-            finally {
+      description,
 
-                setLoading(false);
+      publisherId,
 
-            }
+      languageId,
 
-        }
+      publishedYear,
+    });
 
-        loadBooks();
+    setOpen(false);
 
-    }, []);
+    window.location.reload();
+  }
 
-    if (loading) {
+  useEffect(() => {
+    async function loadBooks() {
+      try {
+        const result = await getBooks();
 
-        return <CircularProgress />;
-
+        setBooks(result);
+      } finally {
+        setLoading(false);
+      }
     }
 
-    return (
+    loadBooks();
+  }, []);
 
-        <>
+  if (loading) {
+    return <CircularProgress />;
+  }
 
-            <Typography
-                variant="h4"
-                gutterBottom
-            >
-                Books
-            </Typography>
+  return (
+    <>
+      <Typography variant="h4" gutterBottom>
+        Books
+      </Typography>
 
-            <Paper>
+      <Button variant="contained" sx={{ mb: 2 }} onClick={() => setOpen(true)}>
+        Add Book
+      </Button>
 
-                <List>
+      <Paper>
+        <List>
+          {books.map((book) => (
+            <ListItem key={book.id} divider>
+              <ListItemText
+                primary={book.title}
+                secondary={`${book.isbn} • ${book.publishedYear}`}
+              />
+            </ListItem>
+          ))}
+        </List>
+      </Paper>
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>Add Book</DialogTitle>
 
-                    {books.map(book => (
+        <DialogContent>
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
 
-                        <ListItem key={book.id} divider>
+          <TextField
+            fullWidth
+            margin="normal"
+            label="ISBN"
+            value={isbn}
+            onChange={(e) => setIsbn(e.target.value)}
+          />
 
-                            <ListItemText
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
 
-                                primary={book.title}
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Publisher Id"
+            value={publisherId}
+            onChange={(e) => setPublisherId(e.target.value)}
+          />
 
-                                secondary={`${book.isbn} • ${book.publishedYear}`}
+          <TextField
+            fullWidth
+            margin="normal"
+            label="Language Id"
+            value={languageId}
+            onChange={(e) => setLanguageId(e.target.value)}
+          />
 
-                            />
+          <TextField
+            fullWidth
+            margin="normal"
+            type="number"
+            label="Published Year"
+            value={publishedYear}
+            onChange={(e) => setPublishedYear(Number(e.target.value))}
+          />
+        </DialogContent>
 
-                        </ListItem>
+        <DialogActions>
+          <Button onClick={() => setOpen(false)}>Cancel</Button>
 
-                    ))}
-
-                </List>
-
-            </Paper>
-
-        </>
-
-    );
-
+          <Button variant="contained" onClick={handleCreate}>
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
+  );
 }

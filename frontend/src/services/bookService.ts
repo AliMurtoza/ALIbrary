@@ -1,5 +1,9 @@
 import apiClient from "../api/apiClient";
-import { Book } from "../types/Book";
+
+import {
+    Book,
+    CreateBookRequest,
+} from "../types/Book";
 
 export async function getBooks() {
 
@@ -7,5 +11,11 @@ export async function getBooks() {
         await apiClient.get<Book[]>("/Books");
 
     return response.data;
+
+}
+
+export async function createBook(request: CreateBookRequest) {
+
+    await apiClient.post("/Books", request);
 
 }
