@@ -14,6 +14,7 @@ using ALIbrary.Application.Languages.Interfaces;
 using ALIbrary.Application.BookCopies.Interfaces;
 using ALIbrary.Application.Loans.Interfaces;
 using ALIbrary.Application.Reservations.Interfaces;
+using ALIbrary.Application.UserBooks.Interfaces;
 
 namespace ALIbrary.Infrastructure.DependencyInjection;
 
@@ -51,6 +52,7 @@ public static class DependencyInjection
         services.AddScoped<IBookCopyService, BookCopyService>();
         services.AddScoped<ILoanService, LoanService>();
         services.AddScoped<IReservationService, ReservationService>();
+        services.AddScoped<IUserBookService, UserBookService>();
 
         return services;
     }
