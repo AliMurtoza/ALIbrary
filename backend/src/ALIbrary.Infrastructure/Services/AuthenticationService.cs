@@ -46,6 +46,8 @@ public class AuthenticationService : IAuthenticationService
             throw new Exception(string.Join(", ", result.Errors.Select(x => x.Description)));
         }
 
+        await _userManager.AddToRoleAsync(user, "Member");
+
         var member = new Member
         {
             FirstName = request.FirstName,

@@ -1,12 +1,14 @@
 using ALIbrary.Api.Extensions;
+using ALIbrary.Api.Middleware;
 using ALIbrary.Application.Authentication;
 using ALIbrary.Application.Common;
 using ALIbrary.Infrastructure.DependencyInjection;
+using ALIbrary.Infrastructure.Seed;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
-using ALIbrary.Api.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -74,6 +76,14 @@ builder.Services
     });
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager =
+        scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+    await RoleSeeder.SeedAsync(roleManager);
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
