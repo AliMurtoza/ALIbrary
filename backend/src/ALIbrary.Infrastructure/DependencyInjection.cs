@@ -6,6 +6,11 @@ using ALIbrary.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using ALIbrary.Application.Authentication.Interfaces;
 using ALIbrary.Infrastructure.Services;
+using ALIbrary.Application.Books.Interfaces;
+using ALIbrary.Application.Authors.Interfaces;
+using ALIbrary.Application.Publishers.Interfaces;
+using ALIbrary.Application.Categories.Interfaces;
+using ALIbrary.Application.Languages.Interfaces;
 
 namespace ALIbrary.Infrastructure.DependencyInjection;
 
@@ -35,6 +40,12 @@ public static class DependencyInjection
 
         services.AddScoped<IAuthenticationService, AuthenticationService>();
         services.AddScoped<IJwtTokenService, JwtTokenService>();
+        services.AddScoped<IBookService, BookService>();
+        services.AddScoped<IAuthorService, AuthorService>();
+        services.AddScoped<IPublisherService, PublisherService>();
+        services.AddScoped<ICategoryService, CategoryService>();
+        services.AddScoped<ILanguageService, LanguageService>();
+
         return services;
     }
 }
