@@ -3,6 +3,7 @@ using ALIbrary.Application.Loans.Interfaces;
 using ALIbrary.Domain.Entities;
 using ALIbrary.Domain.Enums;
 using ALIbrary.Infrastructure.Data;
+using ALIbrary.Infrastructure.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace ALIbrary.Infrastructure.Services;
@@ -21,17 +22,17 @@ public class LoanService : ILoanService
         var member = await _context.Members.FindAsync(request.MemberId);
 
         if (member == null)
-            throw new Exception("Member not found.");
+            throw new NotFoundException("Member not found.");
 
         var copy = await _context.BookCopies
             .Include(c => c.Book)
             .FirstOrDefaultAsync(c => c.Id == request.BookCopyId);
 
         if (copy == null)
-            throw new Exception("Book copy not found.");
+            throw new NotFoundException("Book copy not found.");
 
         if (copy.Status != BookCopyStatus.Available)
-            throw new Exception("Book copy is not available.");
+            throw new BadRequestException("Book copy is not available.");
 
         var loan = new Loan
         {
@@ -73,7 +74,7 @@ public class LoanService : ILoanService
             return null;
 
         if (loan.Status != LoanStatus.Active)
-            throw new Exception("Loan is already closed.");
+            throw new BadRequestException("Loan is already closed.");
 
         loan.ReturnedAt = DateTime.UtcNow;
         loan.Status = LoanStatus.Returned;

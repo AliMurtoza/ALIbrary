@@ -2,6 +2,7 @@
 using ALIbrary.Application.UserBooks.Interfaces;
 using ALIbrary.Domain.Entities;
 using ALIbrary.Infrastructure.Data;
+using ALIbrary.Infrastructure.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace ALIbrary.Infrastructure.Services;
@@ -20,12 +21,12 @@ public class UserBookService : IUserBookService
         var member = await _context.Members.FindAsync(request.MemberId);
 
         if (member == null)
-            throw new Exception("Member not found.");
+            throw new NotFoundException("Member not found.");
 
         var book = await _context.Books.FindAsync(request.BookId);
 
         if (book == null)
-            throw new Exception("Book not found.");
+            throw new NotFoundException("Book not found.");
 
         var userBook = new UserBook
         {

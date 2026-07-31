@@ -3,6 +3,7 @@ using ALIbrary.Application.BookCopies.Interfaces;
 using ALIbrary.Domain.Entities;
 using ALIbrary.Domain.Enums;
 using ALIbrary.Infrastructure.Data;
+using ALIbrary.Infrastructure.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace ALIbrary.Infrastructure.Services;
@@ -21,7 +22,7 @@ public class BookCopyService : IBookCopyService
         var book = await _context.Books.FindAsync(request.BookId);
 
         if (book == null)
-            throw new Exception("Book not found.");
+            throw new NotFoundException("Book not found.");
 
         var copy = new BookCopy
         {

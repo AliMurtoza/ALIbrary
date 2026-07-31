@@ -3,6 +3,7 @@ using ALIbrary.Application.Reservations.Interfaces;
 using ALIbrary.Domain.Entities;
 using ALIbrary.Domain.Enums;
 using ALIbrary.Infrastructure.Data;
+using ALIbrary.Infrastructure.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace ALIbrary.Infrastructure.Services;
@@ -21,12 +22,12 @@ public class ReservationService : IReservationService
         var member = await _context.Members.FindAsync(request.MemberId);
 
         if (member == null)
-            throw new Exception("Member not found.");
+            throw new NotFoundException("Member not found.");
 
         var book = await _context.Books.FindAsync(request.BookId);
 
         if (book == null)
-            throw new Exception("Book not found.");
+            throw new NotFoundException("Book not found.");
 
         var reservation = new Reservation
         {
@@ -61,7 +62,7 @@ public class ReservationService : IReservationService
             return null;
 
         if (reservation.Status != ReservationStatus.Pending)
-            throw new Exception("Only pending reservations can be cancelled.");
+            throw new BadRequestException("Only pending reservations can be cancelled.");
 
         reservation.Status = ReservationStatus.Cancelled;
 

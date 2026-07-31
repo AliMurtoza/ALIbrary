@@ -2,6 +2,7 @@
 using ALIbrary.Application.BookReviews.Interfaces;
 using ALIbrary.Domain.Entities;
 using ALIbrary.Infrastructure.Data;
+using ALIbrary.Infrastructure.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace ALIbrary.Infrastructure.Services;
@@ -22,13 +23,13 @@ public class BookReviewService : IBookReviewService
             .FirstOrDefaultAsync(u => u.Id == request.UserBookId);
 
         if (userBook == null)
-            throw new Exception("UserBook not found.");
+            throw new NotFoundException("UserBook not found.");
 
         var exists = await _context.BookReviews
             .AnyAsync(r => r.UserBookId == request.UserBookId);
 
         if (exists)
-            throw new Exception("Review already exists.");
+            throw new BadRequestException("Review already exists.");
 
         var review = new BookReview
         {

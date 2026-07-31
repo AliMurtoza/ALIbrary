@@ -2,6 +2,7 @@
 using ALIbrary.Application.Authentication.Interfaces;
 using ALIbrary.Domain.Entities;
 using ALIbrary.Infrastructure.Data;
+using ALIbrary.Infrastructure.Exceptions;
 using ALIbrary.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 
@@ -29,7 +30,7 @@ public class AuthenticationService : IAuthenticationService
 
         if (existingUser != null)
         {
-            throw new Exception("Email already exists.");
+            throw new BadRequestException("User already exists.");
         }
 
         var user = new ApplicationUser
@@ -69,14 +70,14 @@ public class AuthenticationService : IAuthenticationService
 
         if (user == null)
         {
-            throw new Exception("Invalid email or password.");
+            throw new BadRequestException("Invalid email or password.");
         }
 
         var isPasswordValid = await _userManager.CheckPasswordAsync(user, request.Password);
 
         if (!isPasswordValid)
         {
-            throw new Exception("Invalid email or password.");
+            throw new BadRequestException("Invalid email or password.");
         }
 
         var token = _jwtTokenService.GenerateToken(

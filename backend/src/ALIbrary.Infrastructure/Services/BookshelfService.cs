@@ -2,6 +2,7 @@
 using ALIbrary.Application.Bookshelves.Interfaces;
 using ALIbrary.Domain.Entities;
 using ALIbrary.Infrastructure.Data;
+using ALIbrary.Infrastructure.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace ALIbrary.Infrastructure.Services;
@@ -20,7 +21,7 @@ public class BookshelfService : IBookshelfService
         var member = await _context.Members.FindAsync(request.MemberId);
 
         if (member == null)
-            throw new Exception("Member not found.");
+            throw new NotFoundException("Member not found.");
 
         var bookshelf = new Bookshelf
         {
@@ -113,19 +114,19 @@ public class BookshelfService : IBookshelfService
         var shelf = await _context.Bookshelves.FindAsync(bookshelfId);
 
         if (shelf == null)
-            throw new Exception("Bookshelf not found.");
+            throw new NotFoundException("Bookshelf not found.");
 
         var userBook = await _context.UserBooks.FindAsync(request.UserBookId);
 
         if (userBook == null)
-            throw new Exception("UserBook not found.");
+            throw new NotFoundException("UserBook not found.");
 
         var exists = await _context.BookshelfBooks.AnyAsync(x =>
             x.BookshelfId == bookshelfId &&
             x.UserBookId == request.UserBookId);
 
         if (exists)
-            throw new Exception("Book already exists in shelf.");
+            throw new BadRequestException("Book already exists in shelf.");
 
         _context.BookshelfBooks.Add(new BookshelfBook
         {
