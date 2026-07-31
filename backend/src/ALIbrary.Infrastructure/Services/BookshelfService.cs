@@ -105,4 +105,69 @@ public class BookshelfService : IBookshelfService
 
         return true;
     }
+
+    public async Task AddBookAsync(
+    Guid bookshelfId,
+    AddBookToShelfRequest request)
+    {
+        var shelf = await _context.Bookshelves.FindAsync(bookshelfId);
+
+        if (shelf == null)
+            throw new Exception("Bookshelf not found.");
+
+        var userBook = await _context.UserBooks.FindAsync(request.UserBookId);
+
+        if (userBook == null)
+            throw new Exception("UserBook not found.");
+
+        var exists = await _context.BookshelfBooks.AnyAsync(x =>
+            x.BookshelfId == bookshelfId &&
+            x.UserBookId == request.UserBookId);
+
+        if (exists)
+            throw new Exception("Book already exists in shelf.");
+
+        _context.BookshelfBooks.Add(new BookshelfBook
+        {
+            BookshelfId = bookshelfId,
+            UserBookId = request.UserBookId
+        });
+
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<bool> RemoveBookAsync(
+    Guid bookshelfId,
+    Guid userBookId)
+    {
+        var item = await _context.BookshelfBooks
+            .FirstOrDefaultAsync(x =>
+                x.BookshelfId == bookshelfId &&
+                x.UserBookId == userBookId);
+
+        if (item == null)
+            return false;
+
+        _context.BookshelfBooks.Remove(item);
+
+        await _context.SaveChangesAsync();
+
+        return true;
+    }
+
+    public async Task<List<BookshelfBookResponse>> GetBooksAsync(Guid bookshelfId)
+    {
+        return await _context.BookshelfBooks
+            .Include(x => x.UserBook)
+                .ThenInclude(ub => ub.Book)
+            .Where(x => x.BookshelfId == bookshelfId)
+            .Select(x => new BookshelfBookResponse
+            {
+                UserBookId = x.UserBookId,
+                BookId = x.UserBook.BookId,
+                BookTitle = x.UserBook.Book.Title,
+                IsFavorite = x.UserBook.IsFavorite
+            })
+            .ToListAsync();
+    }
 }

@@ -63,4 +63,35 @@ public class BookshelvesController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpPost("{bookshelfId:guid}/books")]
+    public async Task<IActionResult> AddBook(
+    Guid bookshelfId,
+    AddBookToShelfRequest request)
+    {
+        await _bookshelfService.AddBookAsync(bookshelfId, request);
+
+        return Ok();
+    }
+
+    [HttpDelete("{bookshelfId:guid}/books/{userBookId:guid}")]
+    public async Task<IActionResult> RemoveBook(
+    Guid bookshelfId,
+    Guid userBookId)
+    {
+        var removed = await _bookshelfService.RemoveBookAsync(
+            bookshelfId,
+            userBookId);
+
+        if (!removed)
+            return NotFound();
+
+        return NoContent();
+    }
+
+    [HttpGet("{bookshelfId:guid}/books")]
+    public async Task<IActionResult> GetBooks(Guid bookshelfId)
+    {
+        return Ok(await _bookshelfService.GetBooksAsync(bookshelfId));
+    }
 }

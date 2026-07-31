@@ -15,4 +15,9 @@ public interface IBookshelfService
     Task<BookshelfResponse?> GetByIdAsync(Guid id);
 
     Task<bool> DeleteAsync(Guid id);
+    Task AddBookAsync(Guid bookshelfId, AddBookToShelfRequest request);
+
+    Task<bool> RemoveBookAsync(Guid bookshelfId, Guid userBookId);
+
+    Task<List<BookshelfBookResponse>> GetBooksAsync(Guid bookshelfId);
 }
