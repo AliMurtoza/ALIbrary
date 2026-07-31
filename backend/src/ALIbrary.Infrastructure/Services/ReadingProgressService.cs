@@ -2,6 +2,7 @@
 using ALIbrary.Application.ReadingProgress.Interfaces;
 using ALIbrary.Domain.Entities;
 using ALIbrary.Infrastructure.Data;
+using ALIbrary.Infrastructure.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace ALIbrary.Infrastructure.Services;
@@ -20,13 +21,13 @@ public class ReadingProgressService : IReadingProgressService
         var userBook = await _context.UserBooks.FindAsync(userBookId);
 
         if (userBook == null)
-            throw new Exception("UserBook not found.");
+            throw new NotFoundException("UserBook not found.");
 
         var exists = await _context.ReadingProgress
             .AnyAsync(r => r.UserBookId == userBookId);
 
         if (exists)
-            throw new Exception("Reading progress already exists.");
+            throw new BadRequestException("Reading progress already exists.");
 
         var progress = new Domain.Entities.ReadingProgress
         {
