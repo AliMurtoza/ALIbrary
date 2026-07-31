@@ -2,6 +2,7 @@ using ALIbrary.Api.Extensions;
 using ALIbrary.Api.Middleware;
 using ALIbrary.Application.Authentication;
 using ALIbrary.Application.Common;
+using ALIbrary.Infrastructure.Data;
 using ALIbrary.Infrastructure.DependencyInjection;
 using ALIbrary.Infrastructure.Seed;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -94,6 +95,21 @@ using (var scope = app.Services.CreateScope())
         scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
     await RoleSeeder.SeedAsync(roleManager);
+}
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    var roleManager =
+        services.GetRequiredService<RoleManager<IdentityRole>>();
+
+    await RoleSeeder.SeedAsync(roleManager);
+
+    var context =
+        services.GetRequiredService<ApplicationDbContext>();
+
+    await DatabaseSeeder.SeedAsync(context);
 }
 
 // Configure the HTTP request pipeline.
