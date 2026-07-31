@@ -12,6 +12,7 @@ using ALIbrary.Application.Publishers.Interfaces;
 using ALIbrary.Application.Categories.Interfaces;
 using ALIbrary.Application.Languages.Interfaces;
 using ALIbrary.Application.BookCopies.Interfaces;
+using ALIbrary.Application.Loans.Interfaces;
 
 namespace ALIbrary.Infrastructure.DependencyInjection;
 
@@ -47,6 +48,7 @@ public static class DependencyInjection
         services.AddScoped<ICategoryService, CategoryService>();
         services.AddScoped<ILanguageService, LanguageService>();
         services.AddScoped<IBookCopyService, BookCopyService>();
+        services.AddScoped<ILoanService, LoanService>();
 
         return services;
     }
