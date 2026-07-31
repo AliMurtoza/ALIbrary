@@ -17,6 +17,7 @@ using ALIbrary.Application.Reservations.Interfaces;
 using ALIbrary.Application.UserBooks.Interfaces;
 using ALIbrary.Application.ReadingProgress.Interfaces;
 using ALIbrary.Application.BookReviews.Interfaces;
+using ALIbrary.Application.Bookshelves.Interfaces;
 
 namespace ALIbrary.Infrastructure.DependencyInjection;
 
@@ -57,6 +58,7 @@ public static class DependencyInjection
         services.AddScoped<IUserBookService, UserBookService>();
         services.AddScoped<IReadingProgressService, ReadingProgressService>();
         services.AddScoped<IBookReviewService, BookReviewService>();
+        services.AddScoped<IBookshelfService, BookshelfService>();
 
         return services;
     }
