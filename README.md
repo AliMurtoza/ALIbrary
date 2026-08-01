@@ -159,6 +159,32 @@ Responsibilities are clearly separated between:
 
 ---
 
+## First Run
+
+When the application starts for the first time, it automatically:
+
+- Creates the required database (if migrations are applied)
+- Seeds the `Admin` and `Member` roles
+- Seeds a default administrator account
+- Seeds sample library data for demonstration
+
+No manual database setup is required beyond applying migrations.
+
+## Default Login
+
+On first application startup, the database is automatically seeded with a default administrator account.
+
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | admin@alibrary.com | Admin123! |
+
+Use these credentials to access all administrative features of the application.
+
+> **Note**
+> - The default admin account is created only if it does not already exist.
+> - Roles (`Admin` and `Member`) are also seeded automatically during application startup.
+> - After logging in, a JWT token is issued and used for authenticated API requests.
+
 # Frontend Architecture
 
 Built using React with TypeScript.
