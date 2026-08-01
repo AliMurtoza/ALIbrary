@@ -19,3 +19,7 @@ export async function createBook(request: CreateBookRequest) {
     await apiClient.post("/Books", request);
 
 }
+
+export async function deleteBook(id: string) {
+    await apiClient.delete(`/Books/${id}`);
+}

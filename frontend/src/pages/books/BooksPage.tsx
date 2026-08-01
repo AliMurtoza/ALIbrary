@@ -17,10 +17,12 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  IconButton,
 } from "@mui/material";
 
-import { createBook } from "../../services/bookService";
-import { getBooks } from "../../services/bookService";
+import DeleteIcon from "@mui/icons-material/Delete";
+
+import { createBook, deleteBook, getBooks } from "../../services/bookService";
 import { Book } from "../../types/Book";
 import { Lookup } from "../../types/Lookup";
 
@@ -49,6 +51,9 @@ export default function BooksPage() {
   const [languages, setLanguages] = useState<Lookup[]>([]);
   const [categories, setCategories] = useState<Lookup[]>([]);
 
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
+
   const [publishedYear, setPublishedYear] = useState(2026);
 
   async function handleCreate() {
@@ -64,6 +69,18 @@ export default function BooksPage() {
 
     setOpen(false);
 
+    window.location.reload();
+  }
+
+  function handleDelete(book: Book) {
+    setSelectedBook(book);
+    setDeleteDialogOpen(true);
+  }
+
+  async function confirmDelete() {
+    if (!selectedBook) return;
+    await deleteBook(selectedBook.id);
+    setDeleteDialogOpen(false);
     window.location.reload();
   }
 
@@ -106,7 +123,15 @@ export default function BooksPage() {
       <Paper>
         <List>
           {books.map((book) => (
-            <ListItem key={book.id} divider>
+            <ListItem
+              key={book.id}
+              divider
+              secondaryAction={
+                <IconButton color="error" onClick={() => handleDelete(book)}>
+                  <DeleteIcon />
+                </IconButton>
+              }
+            >
               <ListItemText
                 primary={book.title}
                 secondary={`${book.isbn} • ${book.publishedYear}`}
@@ -211,6 +236,28 @@ export default function BooksPage() {
 
           <Button variant="contained" onClick={handleCreate}>
             Save
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={() => setDeleteDialogOpen(false)}
+      >
+        <DialogTitle>Confirm Delete</DialogTitle>
+
+        <DialogContent>
+          <Typography>
+            Are you sure you want to delete
+            <strong> "{selectedBook?.title}"</strong>?
+          </Typography>
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
+
+          <Button color="error" variant="contained" onClick={confirmDelete}>
+            Delete
           </Button>
         </DialogActions>
       </Dialog>
