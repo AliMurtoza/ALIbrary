@@ -8,6 +8,7 @@ using ALIbrary.Application.Categories.Interfaces;
 using ALIbrary.Application.Dashboard.Interfaces;
 using ALIbrary.Application.Languages.Interfaces;
 using ALIbrary.Application.Loans.Interfaces;
+using ALIbrary.Application.Members.Interfaces;
 using ALIbrary.Application.Publishers.Interfaces;
 using ALIbrary.Application.ReadingProgress.Interfaces;
 using ALIbrary.Application.Reservations.Interfaces;
@@ -61,6 +62,7 @@ public static class DependencyInjection
         services.AddScoped<IBookReviewService, BookReviewService>();
         services.AddScoped<IBookshelfService, BookshelfService>();
         services.AddScoped<IDashboardService, DashboardService>();
+        services.AddScoped<IMemberService, MemberService>();
 
         return services;
     }
