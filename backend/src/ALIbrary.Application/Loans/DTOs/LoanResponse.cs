@@ -7,6 +7,7 @@ public class LoanResponse
     public Guid Id { get; set; }
 
     public Guid MemberId { get; set; }
+    public string MemberName { get; set; } = string.Empty;
 
     public Guid BookCopyId { get; set; }
 

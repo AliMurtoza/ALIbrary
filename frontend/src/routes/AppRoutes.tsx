@@ -9,6 +9,7 @@ import BooksPage from "../pages/books/BooksPage";
 
 import ProtectedRoute from "./ProtectedRoute";
 import AuthorsPage from "../pages/authors/AuthorsPage";
+import LoansPage from "../pages/loans/LoansPage";
 
 export default function AppRoutes() {
   const token = localStorage.getItem("token");
@@ -31,6 +32,7 @@ export default function AppRoutes() {
           <Route path="/" element={<DashboardPage />} />
           <Route path="/books" element={<BooksPage />} />
           <Route path="/authors" element={<AuthorsPage />} />
+          <Route path="/loans" element={<LoansPage />} />
         </Route>
 
         <Route path="*" element={<NotFoundPage />} />

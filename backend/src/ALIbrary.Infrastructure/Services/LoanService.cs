@@ -53,6 +53,7 @@ public class LoanService : ILoanService
         {
             Id = loan.Id,
             MemberId = loan.MemberId,
+            MemberName = $"{loan.Member.FirstName} {loan.Member.LastName}",
             BookCopyId = loan.BookCopyId,
             BookTitle = copy.Book.Title,
             Barcode = copy.Barcode,
@@ -66,6 +67,7 @@ public class LoanService : ILoanService
     public async Task<LoanResponse?> ReturnAsync(Guid loanId)
     {
         var loan = await _context.Loans
+            .Include(l => l.Member)
             .Include(l => l.BookCopy)
                 .ThenInclude(c => c.Book)
             .FirstOrDefaultAsync(l => l.Id == loanId);
@@ -87,6 +89,7 @@ public class LoanService : ILoanService
         {
             Id = loan.Id,
             MemberId = loan.MemberId,
+            MemberName = $"{loan.Member.FirstName} {loan.Member.LastName}",
             BookCopyId = loan.BookCopyId,
             BookTitle = loan.BookCopy.Book.Title,
             Barcode = loan.BookCopy.Barcode,
@@ -100,6 +103,7 @@ public class LoanService : ILoanService
     public async Task<List<LoanResponse>> GetAllAsync()
     {
         return await _context.Loans
+            .Include(l => l.Member)
             .Include(l => l.BookCopy)
                 .ThenInclude(c => c.Book)
             .Select(l => new LoanResponse
@@ -120,6 +124,7 @@ public class LoanService : ILoanService
     public async Task<LoanResponse?> GetByIdAsync(Guid id)
     {
         return await _context.Loans
+            .Include(l => l.Member)
             .Include(l => l.BookCopy)
                 .ThenInclude(c => c.Book)
             .Where(l => l.Id == id)
