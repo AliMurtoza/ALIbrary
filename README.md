@@ -170,6 +170,64 @@ When the application starts for the first time, it automatically:
 
 No manual database setup is required beyond applying migrations.
 
+## Configuration
+
+Before running the project, create a local configuration file for development.
+
+### Backend
+
+1. Navigate to the `ALIbrary.Api` project.
+2. Copy:
+
+```text
+appsettings.Development.example.json
+```
+
+to
+
+```text
+appsettings.Development.json
+```
+
+3. Update the following values:
+
+* PostgreSQL connection string
+* JWT secret key
+
+Example:
+
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Host=localhost;Port=5432;Database=ALIbraryDb;Username=YOUR_USERNAME;Password=YOUR_PASSWORD"
+  },
+
+  "Jwt": {
+    "Key": "Your-Secure-JWT-Key"
+  }
+}
+```
+
+> **Note**
+>
+> `appsettings.Development.json` contains machine-specific secrets and is intentionally excluded from version control through `.gitignore`. Only `appsettings.Development.example.json` is committed to the repository.
+
+---
+
+## Default Administrator Account
+
+During application startup, the database is seeded with a default administrator account.
+
+| Field    | Value                |
+| -------- | -------------------- |
+| Email    | `admin@alibrary.com` |
+| Password | `Admin123!`          |
+
+This account can be used to log into the application immediately after the database has been created and seeded.
+
+> Change the default administrator password before deploying the application to any shared or production environment.
+
+
 ## Default Login
 
 On first application startup, the database is automatically seeded with a default administrator account.
