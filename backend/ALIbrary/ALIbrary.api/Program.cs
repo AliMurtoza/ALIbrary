@@ -92,20 +92,17 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    var roleManager =
-        scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-
-    await RoleSeeder.SeedAsync(roleManager);
-}
-
-using (var scope = app.Services.CreateScope())
-{
     var services = scope.ServiceProvider;
 
     var roleManager =
         services.GetRequiredService<RoleManager<IdentityRole>>();
 
     await RoleSeeder.SeedAsync(roleManager);
+
+    var userManager =
+        services.GetRequiredService<UserManager<ApplicationUser>>();
+
+    await AdminUserSeeder.SeedAsync(userManager);
 
     var context =
         services.GetRequiredService<ApplicationDbContext>();
