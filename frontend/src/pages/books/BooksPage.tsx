@@ -168,12 +168,24 @@ export default function BooksPage() {
         Add Book
       </Button>
 
-      <Paper>
+      <Paper
+        elevation={3}
+        sx={{
+          p: 2,
+          bgcolor: "#fafafa",
+        }}
+      >
         <List>
           {books.map((book) => (
             <ListItem
               key={book.id}
-              divider
+              sx={{
+                mb: 1,
+                borderRadius: 2,
+                bgcolor: "#ffffff",
+                border: "1px solid #e0e0e0",
+                boxShadow: 1,
+              }}
               secondaryAction={
                 <>
                   <IconButton color="primary" onClick={() => handleEdit(book)}>

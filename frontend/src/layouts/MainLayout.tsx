@@ -62,7 +62,7 @@ export default function MainLayout() {
 
         <List>
           <ListItem disablePadding>
-            <ListItemButton>
+            <ListItemButton onClick={() => navigate("/")}>
               <ListItemText primary="Dashboard" />
             </ListItemButton>
           </ListItem>
@@ -74,19 +74,19 @@ export default function MainLayout() {
           </ListItem>
 
           <ListItem disablePadding>
-            <ListItemButton>
+            <ListItemButton onClick={() => navigate("/authors")}>
               <ListItemText primary="Authors" />
             </ListItemButton>
           </ListItem>
 
           <ListItem disablePadding>
-            <ListItemButton>
+            <ListItemButton onClick={() => navigate("/loans")}>
               <ListItemText primary="Loans" />
             </ListItemButton>
           </ListItem>
 
           <ListItem disablePadding>
-            <ListItemButton>
+            <ListItemButton onClick={() => navigate("/reservations")}>
               <ListItemText primary="Reservations" />
             </ListItemButton>
           </ListItem>
