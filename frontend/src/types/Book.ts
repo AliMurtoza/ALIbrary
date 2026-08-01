@@ -13,6 +13,8 @@ export interface Book {
 
     languageId: string;
     languageName: string;
+
+    authors: string[];
 }
 
 export interface CreateBookRequest {

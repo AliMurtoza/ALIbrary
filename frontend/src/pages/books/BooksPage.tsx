@@ -199,7 +199,18 @@ export default function BooksPage() {
               }
             >
               <ListItemText
-                primary={book.title}
+                primary={
+                  <>
+                    <Typography>{book.title}</Typography>
+
+                    <Typography variant="body2" color="text.secondary">
+                      by{" "}
+                      {book.authors.length > 0
+                        ? book.authors.join(", ")
+                        : "Unknown Author"}
+                    </Typography>
+                  </>
+                }
                 secondary={
                   <>
                     {book.isbn} • {book.publishedYear}

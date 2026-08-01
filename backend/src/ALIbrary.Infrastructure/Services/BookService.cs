@@ -43,6 +43,8 @@ public class BookService : IBookService
             .Include(b => b.Category)
             .Include(b => b.Publisher)
             .Include(b => b.Language)
+            .Include(b => b.BookAuthors)
+            .ThenInclude(ba => ba.Author)
             .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(query.Search))
@@ -87,7 +89,11 @@ public class BookService : IBookService
                 PublisherName = b.Publisher.Name,
 
                 LanguageId = b.LanguageId,
-                LanguageName = b.Language.Name
+                LanguageName = b.Language.Name,
+
+                Authors = b.BookAuthors
+                    .Select(ba => ba.Author.DisplayName)
+                    .ToList(),
             })
             .ToListAsync();
             }

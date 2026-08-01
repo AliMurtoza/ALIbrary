@@ -23,4 +23,5 @@ public class BookResponse
     public Guid LanguageId { get; set; }
 
     public string LanguageName { get; set; } = string.Empty;
+    public List<string> Authors { get; set; } = [];
 }
