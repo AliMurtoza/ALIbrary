@@ -80,6 +80,12 @@ export default function MainLayout() {
           </ListItem>
 
           <ListItem disablePadding>
+            <ListItemButton onClick={() => navigate("/members")}>
+              <ListItemText primary="Members" />
+            </ListItemButton>
+          </ListItem>
+
+          <ListItem disablePadding>
             <ListItemButton onClick={() => navigate("/loans")}>
               <ListItemText primary="Loans" />
             </ListItemButton>
