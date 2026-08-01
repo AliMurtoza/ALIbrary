@@ -7,6 +7,7 @@ public class UpdateBookRequest
     public Guid PublisherId { get; set; }
 
     public Guid LanguageId { get; set; }
+    public Guid CategoryId { get; set; }
 
     public string ISBN { get; set; } = string.Empty;
 

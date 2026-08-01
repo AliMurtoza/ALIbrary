@@ -2,6 +2,7 @@
 using ALIbrary.Application.Books.Interfaces;
 using ALIbrary.Domain.Entities;
 using ALIbrary.Infrastructure.Data;
+using ALIbrary.Infrastructure.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace ALIbrary.Infrastructure.Services;
@@ -32,13 +33,8 @@ public class BookService : IBookService
 
         await _context.SaveChangesAsync();
 
-        return new BookResponse
-        {
-            Id = book.Id,
-            Title = book.Title,
-            ISBN = book.ISBN,
-            PublishedYear = book.PublicationYear
-        };
+        return await GetByIdAsync(book.Id)
+                    ?? throw new BadRequestException("Book created but could not be loaded.");
     }
 
     public async Task<List<BookResponse>> GetAllAsync(BookQueryParameters query)
@@ -81,7 +77,17 @@ public class BookService : IBookService
                 Id = b.Id,
                 Title = b.Title,
                 ISBN = b.ISBN,
-                PublishedYear = b.PublicationYear
+                PublishedYear = b.PublicationYear,
+                Description = b.Description ?? string.Empty,
+
+                CategoryId = b.CategoryId,
+                CategoryName = b.Category.Name,
+
+                PublisherId = b.PublisherId,
+                PublisherName = b.Publisher.Name,
+
+                LanguageId = b.LanguageId,
+                LanguageName = b.Language.Name
             })
             .ToListAsync();
             }
@@ -89,13 +95,26 @@ public class BookService : IBookService
     public async Task<BookResponse?> GetByIdAsync(Guid id)
     {
         return await _context.Books
-            .Where(book => book.Id == id)
-            .Select(book => new BookResponse
+            .Include(b => b.Category)
+            .Include(b => b.Publisher)
+            .Include(b => b.Language)
+            .Where(b => b.Id == id)
+            .Select(b => new BookResponse
             {
-                Id = book.Id,
-                Title = book.Title,
-                ISBN = book.ISBN,
-                PublishedYear = book.PublicationYear
+                Id = b.Id,
+                Title = b.Title,
+                ISBN = b.ISBN,
+                PublishedYear = b.PublicationYear,
+                Description = b.Description ?? string.Empty,
+
+                CategoryId = b.CategoryId,
+                CategoryName = b.Category.Name,
+
+                PublisherId = b.PublisherId,
+                PublisherName = b.Publisher.Name,
+
+                LanguageId = b.LanguageId,
+                LanguageName = b.Language.Name
             })
             .FirstOrDefaultAsync();
     }
@@ -108,6 +127,7 @@ public class BookService : IBookService
             return null;
 
         book.Title = request.Title;
+        book.CategoryId = request.CategoryId;
         book.PublisherId = request.PublisherId;
         book.LanguageId = request.LanguageId;
         book.ISBN = request.ISBN;
@@ -116,13 +136,7 @@ public class BookService : IBookService
 
         await _context.SaveChangesAsync();
 
-        return new BookResponse
-        {
-            Id = book.Id,
-            Title = book.Title,
-            ISBN = book.ISBN,
-            PublishedYear = book.PublicationYear
-        };
+        return await GetByIdAsync(book.Id);
     }
 
     public async Task<bool> DeleteAsync(Guid id)

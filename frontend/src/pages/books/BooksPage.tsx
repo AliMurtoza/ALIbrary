@@ -134,7 +134,14 @@ export default function BooksPage() {
             >
               <ListItemText
                 primary={book.title}
-                secondary={`${book.isbn} • ${book.publishedYear}`}
+                secondary={
+                  <>
+                    {book.isbn} • {book.publishedYear}
+                    <br />
+                    {book.publisherName} • {book.languageName} •{" "}
+                    {book.categoryName}
+                  </>
+                }
               />
             </ListItem>
           ))}
