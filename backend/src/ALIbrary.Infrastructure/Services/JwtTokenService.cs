@@ -19,7 +19,8 @@ public class JwtTokenService : IJwtTokenService
 
     public string GenerateToken(
         string userId,
-        string email)
+        string email,
+        IList<string> roles)
     {
         var claims = new List<Claim>
         {
@@ -27,6 +28,11 @@ public class JwtTokenService : IJwtTokenService
             new(JwtRegisteredClaimNames.Email, email),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
+
+        foreach (var role in roles)
+        {
+            claims.Add(new Claim(ClaimTypes.Role, role));
+        }
 
         var key = new SymmetricSecurityKey(
             Encoding.UTF8.GetBytes(_jwtSettings.Key));

@@ -4,6 +4,8 @@ public class CreateBookRequest
 {
     public string Title { get; set; } = string.Empty;
 
+    public Guid CategoryId { get; set; }
+
     public Guid PublisherId { get; set; }
 
     public Guid LanguageId { get; set; }

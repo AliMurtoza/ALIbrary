@@ -4,6 +4,7 @@ using ALIbrary.Application.Authentication;
 using ALIbrary.Application.Common;
 using ALIbrary.Infrastructure.Data;
 using ALIbrary.Infrastructure.DependencyInjection;
+using ALIbrary.Infrastructure.Identity;
 using ALIbrary.Infrastructure.Seed;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
