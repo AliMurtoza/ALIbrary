@@ -21,8 +21,14 @@ import {
 } from "@mui/material";
 
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 
-import { createBook, deleteBook, getBooks } from "../../services/bookService";
+import {
+  createBook,
+  deleteBook,
+  getBooks,
+  updateBook,
+} from "../../services/bookService";
 import { Book } from "../../types/Book";
 import { Lookup } from "../../types/Lookup";
 
@@ -54,10 +60,12 @@ export default function BooksPage() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
 
+  const [editingBook, setEditingBook] = useState<Book | null>(null);
+
   const [publishedYear, setPublishedYear] = useState(2026);
 
-  async function handleCreate() {
-    await createBook({
+  async function handleSave() {
+    const request = {
       title,
       isbn,
       description,
@@ -65,7 +73,13 @@ export default function BooksPage() {
       languageId,
       categoryId,
       publishedYear,
-    });
+    };
+
+    if (editingBook) {
+      await updateBook(editingBook.id, request);
+    } else {
+      await createBook(request);
+    }
 
     setOpen(false);
 
@@ -82,6 +96,22 @@ export default function BooksPage() {
     await deleteBook(selectedBook.id);
     setDeleteDialogOpen(false);
     window.location.reload();
+  }
+
+  function handleEdit(book: Book) {
+    setEditingBook(book);
+
+    setTitle(book.title);
+    setIsbn(book.isbn);
+    setDescription(book.description);
+
+    setPublisherId(book.publisherId);
+    setLanguageId(book.languageId);
+    setCategoryId(book.categoryId);
+
+    setPublishedYear(book.publishedYear);
+
+    setOpen(true);
   }
 
   useEffect(() => {
@@ -116,7 +146,25 @@ export default function BooksPage() {
         Books
       </Typography>
 
-      <Button variant="contained" sx={{ mb: 2 }} onClick={() => setOpen(true)}>
+      <Button
+        variant="contained"
+        sx={{ mb: 2 }}
+        onClick={() => {
+          setEditingBook(null);
+
+          setTitle("");
+          setIsbn("");
+          setDescription("");
+
+          setPublisherId("");
+          setLanguageId("");
+          setCategoryId("");
+
+          setPublishedYear(2026);
+
+          setOpen(true);
+        }}
+      >
         Add Book
       </Button>
 
@@ -127,9 +175,15 @@ export default function BooksPage() {
               key={book.id}
               divider
               secondaryAction={
-                <IconButton color="error" onClick={() => handleDelete(book)}>
-                  <DeleteIcon />
-                </IconButton>
+                <>
+                  <IconButton color="primary" onClick={() => handleEdit(book)}>
+                    <EditIcon />
+                  </IconButton>
+
+                  <IconButton color="error" onClick={() => handleDelete(book)}>
+                    <DeleteIcon />
+                  </IconButton>
+                </>
               }
             >
               <ListItemText
@@ -153,7 +207,7 @@ export default function BooksPage() {
         maxWidth="sm"
         fullWidth
       >
-        <DialogTitle>Add Book</DialogTitle>
+        <DialogTitle>{editingBook ? "Edit Book" : "Add Book"}</DialogTitle>
 
         <DialogContent>
           <TextField
@@ -241,8 +295,8 @@ export default function BooksPage() {
         <DialogActions>
           <Button onClick={() => setOpen(false)}>Cancel</Button>
 
-          <Button variant="contained" onClick={handleCreate}>
-            Save
+          <Button variant="contained" onClick={handleSave}>
+            {editingBook ? "Update" : "Save"}
           </Button>
         </DialogActions>
       </Dialog>
