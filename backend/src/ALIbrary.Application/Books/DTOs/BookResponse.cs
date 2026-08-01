@@ -6,6 +6,10 @@ public class BookResponse
 
     public string Title { get; set; } = string.Empty;
 
+    public List<Guid> AuthorIds { get; set; } = [];
+
+    public List<string> AuthorNames { get; set; } = [];
+
     public string ISBN { get; set; } = string.Empty;
 
     public int PublishedYear { get; set; }
