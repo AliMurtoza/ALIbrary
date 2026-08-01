@@ -31,6 +31,17 @@ public class BookService : IBookService
 
         _context.Books.Add(book);
 
+        foreach (var authorId in request.AuthorIds)
+        {
+            _context.BookAuthors.Add(new BookAuthor
+            {
+                BookId = book.Id,
+                AuthorId = authorId
+            });
+        }
+
+        await _context.SaveChangesAsync();
+
         await _context.SaveChangesAsync();
 
         return await GetByIdAsync(book.Id)
@@ -43,6 +54,8 @@ public class BookService : IBookService
             .Include(b => b.Category)
             .Include(b => b.Publisher)
             .Include(b => b.Language)
+            .Include(b => b.BookAuthors)
+            .ThenInclude(ba => ba.Author)
             .AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(query.Search))
@@ -87,7 +100,15 @@ public class BookService : IBookService
                 PublisherName = b.Publisher.Name,
 
                 LanguageId = b.LanguageId,
-                LanguageName = b.Language.Name
+                LanguageName = b.Language.Name,
+
+                AuthorIds = b.BookAuthors
+                    .Select(x => x.AuthorId)
+                    .ToList(),
+
+                AuthorNames = b.BookAuthors
+                    .Select(x => x.Author.DisplayName)
+                    .ToList(),
             })
             .ToListAsync();
             }
@@ -133,6 +154,20 @@ public class BookService : IBookService
         book.ISBN = request.ISBN;
         book.PublicationYear = request.PublishedYear;
         book.Description = request.Description;
+
+        var existingAuthors = _context.BookAuthors
+            .Where(x => x.BookId == id);
+
+        _context.BookAuthors.RemoveRange(existingAuthors);
+
+        foreach (var authorId in request.AuthorIds)
+        {
+            _context.BookAuthors.Add(new BookAuthor
+            {
+                BookId = id,
+                AuthorId = authorId
+            });
+        }
 
         await _context.SaveChangesAsync();
 

@@ -37,6 +37,7 @@ import {
   getLanguages,
   getCategories,
 } from "../../services/lookupService";
+import { getAuthors } from "../../services/authorService";
 
 export default function BooksPage() {
   const [books, setBooks] = useState<Book[]>([]);
@@ -48,6 +49,9 @@ export default function BooksPage() {
   const [title, setTitle] = useState("");
   const [isbn, setIsbn] = useState("");
   const [description, setDescription] = useState("");
+
+  const [authors, setAuthors] = useState<Lookup[]>([]);
+  const [authorIds, setAuthorIds] = useState<string[]>([]);
 
   const [publisherId, setPublisherId] = useState("");
   const [languageId, setLanguageId] = useState("");
@@ -72,6 +76,7 @@ export default function BooksPage() {
       publisherId,
       languageId,
       categoryId,
+      authorIds,
       publishedYear,
     };
 
@@ -108,6 +113,7 @@ export default function BooksPage() {
     setPublisherId(book.publisherId);
     setLanguageId(book.languageId);
     setCategoryId(book.categoryId);
+    setAuthorIds(book.authorIds);
 
     setPublishedYear(book.publishedYear);
 
@@ -128,6 +134,14 @@ export default function BooksPage() {
 
         const categoriesResult = await getCategories();
         setCategories(categoriesResult);
+
+        const authorsResult = await getAuthors();
+        setAuthors(
+          authorsResult.map((author) => ({
+            id: author.id,
+            name: author.displayName,
+          })),
+        );
       } finally {
         setLoading(false);
       }
@@ -159,6 +173,7 @@ export default function BooksPage() {
           setPublisherId("");
           setLanguageId("");
           setCategoryId("");
+          setAuthorIds([]);
 
           setPublishedYear(2026);
 
@@ -199,13 +214,24 @@ export default function BooksPage() {
               }
             >
               <ListItemText
-                primary={book.title}
+                primary={
+                  <>
+                    <Typography>{book.title}</Typography>
+
+                    <Typography variant="body2" color="text.secondary">
+                      by{" "}
+                      {book.authorNames.length > 0
+                        ? book.authorNames.join(", ")
+                        : "Unknown Author"}
+                    </Typography>
+                  </>
+                }
                 secondary={
                   <>
-                    {book.isbn} • {book.publishedYear}
-                    <br />
                     {book.publisherName} • {book.languageName} •{" "}
                     {book.categoryName}
+                    <br />
+                    ISBN: {book.isbn} • {book.publishedYear}
                   </>
                 }
               />
@@ -229,6 +255,29 @@ export default function BooksPage() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
+
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Authors</InputLabel>
+
+            <Select
+              multiple
+              value={authorIds}
+              label="Authors"
+              onChange={(e) => setAuthorIds(e.target.value as string[])}
+              renderValue={(selected) =>
+                authors
+                  .filter((a) => selected.includes(a.id))
+                  .map((a) => a.name)
+                  .join(", ")
+              }
+            >
+              {authors.map((author) => (
+                <MenuItem key={author.id} value={author.id}>
+                  {author.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
           <TextField
             fullWidth

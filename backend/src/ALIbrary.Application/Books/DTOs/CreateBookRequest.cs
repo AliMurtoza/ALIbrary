@@ -3,6 +3,7 @@
 public class CreateBookRequest
 {
     public string Title { get; set; } = string.Empty;
+    public List<Guid> AuthorIds { get; set; } = [];
 
     public Guid CategoryId { get; set; }
 

@@ -13,6 +13,9 @@ export interface Book {
 
     languageId: string;
     languageName: string;
+
+    authorIds: string[];
+    authorNames: string[];
 }
 
 export interface CreateBookRequest {
@@ -20,6 +23,7 @@ export interface CreateBookRequest {
     categoryId: string;
     publisherId: string;
     languageId: string;
+    authorIds: string[];
     isbn: string;
     publishedYear: number;
     description: string;
@@ -30,6 +34,7 @@ export interface UpdateBookRequest {
     categoryId: string;
     publisherId: string;
     languageId: string;
+    authorIds: string[];
     isbn: string;
     publishedYear: number;
     description: string;
