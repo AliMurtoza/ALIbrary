@@ -1,93 +1,181 @@
 # Development Log
 
----
-
-# Session 1
-
-**Date:** July 29, 2026
-
-**Duration:** ~1–2 hours
-
-## Objectives
-
-Initialize the project and establish the development foundation.
+This document records the daily development progress of **ALIbrary**.
 
 ---
 
-## Completed
+# 28 July 2026 (Day 1)
 
-### Repository & Solution
+## Project Foundation
 
-- Initialized the GitHub repository.
-- Established the monorepo structure.
-- Created the backend solution.
-- Added the API, Application, Domain, Infrastructure, and Tests projects.
-- Targeted .NET 8 LTS.
-- Configured project references.
-
----
-
-## Key Decisions
-
-- Use .NET 8 LTS.
-- Adopt Clean Architecture.
-- Organize the project as a modular monorepo.
+* Initialized backend using ASP.NET Core Web API.
+* Initialized frontend using React + TypeScript + Vite.
+* Configured Entity Framework Core with SQL Server.
+* Established Clean Architecture solution structure.
+* Configured dependency injection.
+* Added Swagger/OpenAPI.
+* Implemented global exception handling middleware.
+* Configured JWT Authentication.
+* Integrated ASP.NET Identity.
+* Implemented role-based authorization.
+* Added role seeding (Admin & Member).
+* Added default administrator account seeding.
 
 ---
 
-# Session 2
+# 29 July 2026 (Day 2)
 
-**Date:** July 30, 2026
+## Dashboard & Book Management
 
-**Duration:** ~8–10 hours
+Implemented Dashboard.
 
-## Objectives
+Completed:
 
-Complete the backend foundation, finalize the domain model, and establish the database layer.
+* Dashboard statistics
+* Total Books
+* Total Authors
+* Active Loans
+* Pending Reservations
+* Recently Added Books
+* Responsive dashboard UI
 
----
+Implemented complete Book Management.
 
-## Completed
+Backend:
 
-### Project Setup
+* CRUD operations
+* Search & filtering
+* DTO mapping
 
-- Installed required NuGet packages.
-- Configured Dependency Injection.
-- Configured application settings.
-- Configured Swagger.
-- Verified successful solution builds.
+Frontend:
 
-### Database
-
-- Installed PostgreSQL and pgAdmin 4.
-- Created the `ALIbraryDb` database.
-- Configured Entity Framework Core.
-- Implemented Fluent API configurations.
-- Generated the initial migration.
-- Successfully created the PostgreSQL schema.
-
-### Architecture & Domain
-
-- Finalized the Version 1 domain model.
-- Implemented all domain entities.
-- Configured entity relationships.
-- Introduced UserBook, ReadingProgress, and Bookshelves.
-- Declared a Version 1 feature freeze.
-
-### Documentation
-
-- Established the project documentation structure.
-- Recorded architecture decisions.
-- Defined engineering principles.
-- Created the project plan, ERD, and system design documents.
-- Updated project documentation to reflect implementation progress.
+* Book list
+* Add/Edit/Delete dialogs
+* Category lookup
+* Publisher lookup
+* Language lookup
+* Consistent Material UI design
 
 ---
 
-## Key Decisions
+# 30 July 2026 (Day 3)
 
-- Use PostgreSQL with Entity Framework Core.
-- Use Repository Pattern with Dependency Injection.
-- Separate `Book` from `BookCopy`.
-- Model personal reading through `UserBook`.
-- Freeze the Version 1 domain model before feature development.
+## Author, Loan & Reservation Management
+
+Completed Author Management.
+
+* CRUD API
+* CRUD UI
+* Responsive author page
+
+Completed Loan Management.
+
+Backend:
+
+* Borrow book
+* Return book
+* Loan history
+
+Frontend:
+
+* Loan list
+* Borrow dialog
+* Return dialog
+* Status indicators
+
+Completed Reservation Management.
+
+Backend:
+
+* Create reservation
+* Cancel reservation
+* Reservation listing
+
+Frontend:
+
+* Reservation page
+* Create reservation dialog
+* Cancel reservation
+* Status chips
+
+---
+
+# 31 July 2026 (Day 4)
+
+## Member Management & Book Improvements
+
+Completed Member Management.
+
+Backend:
+
+* CRUD endpoints
+* Service layer
+
+Frontend:
+
+* Member list
+* Add/Edit/Delete dialogs
+
+Enhanced Book Management.
+
+* Added multi-author support.
+* Connected books with authors.
+* Displayed author names in the Books page.
+* Added author multi-select while creating/editing books.
+
+Improved UI consistency across:
+
+* Dashboard
+* Books
+* Authors
+* Members
+* Loans
+* Reservations
+
+---
+
+# 1 August 2026 (Day 5)
+
+## Security, Documentation & Final Polish
+
+Security improvements:
+
+* Automatic Admin role assignment.
+* Default administrator seeding.
+* Removed manual database role updates.
+
+Documentation completed:
+
+* README
+* System Design
+* Project Plan
+* Engineering Principles
+* Architecture Decisions
+* Entity Relationship Diagram (ERD)
+* Changelog
+* Development Log
+
+Repository improvements:
+
+* Added GitHub project documentation.
+* Improved repository metadata.
+* Organized architecture and development documentation.
+
+---
+
+# Current Progress
+
+| Module            | Status     |
+| ----------------- | ---------- |
+| Authentication    | ✅ Complete |
+| Dashboard         | ✅ Complete |
+| Books             | ✅ Complete |
+| Authors           | ✅ Complete |
+| Members           | ✅ Complete |
+| Loans             | ✅ Complete |
+| Reservations      | ✅ Complete |
+| Documentation     | ✅ Complete |
+| Branch Management | ⏳ Pending  |
+| Reports           | ⏳ Pending  |
+| Unit Tests        | ⏳ Pending  |
+| Docker / CI-CD    | ⏳ Pending  |
