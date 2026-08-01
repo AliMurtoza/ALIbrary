@@ -1,23 +1,24 @@
+using ALIbrary.Application.Authentication.Interfaces;
+using ALIbrary.Application.Authors.Interfaces;
+using ALIbrary.Application.BookCopies.Interfaces;
+using ALIbrary.Application.BookReviews.Interfaces;
+using ALIbrary.Application.Books.Interfaces;
+using ALIbrary.Application.Bookshelves.Interfaces;
+using ALIbrary.Application.Categories.Interfaces;
+using ALIbrary.Application.Dashboard.Interfaces;
+using ALIbrary.Application.Languages.Interfaces;
+using ALIbrary.Application.Loans.Interfaces;
+using ALIbrary.Application.Publishers.Interfaces;
+using ALIbrary.Application.ReadingProgress.Interfaces;
+using ALIbrary.Application.Reservations.Interfaces;
+using ALIbrary.Application.UserBooks.Interfaces;
 using ALIbrary.Infrastructure.Data;
+using ALIbrary.Infrastructure.Identity;
+using ALIbrary.Infrastructure.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ALIbrary.Infrastructure.Identity;
-using Microsoft.AspNetCore.Identity;
-using ALIbrary.Application.Authentication.Interfaces;
-using ALIbrary.Infrastructure.Services;
-using ALIbrary.Application.Books.Interfaces;
-using ALIbrary.Application.Authors.Interfaces;
-using ALIbrary.Application.Publishers.Interfaces;
-using ALIbrary.Application.Categories.Interfaces;
-using ALIbrary.Application.Languages.Interfaces;
-using ALIbrary.Application.BookCopies.Interfaces;
-using ALIbrary.Application.Loans.Interfaces;
-using ALIbrary.Application.Reservations.Interfaces;
-using ALIbrary.Application.UserBooks.Interfaces;
-using ALIbrary.Application.ReadingProgress.Interfaces;
-using ALIbrary.Application.BookReviews.Interfaces;
-using ALIbrary.Application.Bookshelves.Interfaces;
 
 namespace ALIbrary.Infrastructure.DependencyInjection;
 
@@ -59,6 +60,7 @@ public static class DependencyInjection
         services.AddScoped<IReadingProgressService, ReadingProgressService>();
         services.AddScoped<IBookReviewService, BookReviewService>();
         services.AddScoped<IBookshelfService, BookshelfService>();
+        services.AddScoped<IDashboardService, DashboardService>();
 
         return services;
     }
