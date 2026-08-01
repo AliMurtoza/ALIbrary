@@ -1,239 +1,171 @@
 # Entity Relationship Diagram (ERD)
 
-## Purpose
+This document describes the current database structure of **ALIbrary**.
 
-This document defines the complete database domain model for ALIbrary.
-
-It serves as the primary reference for designing entities, relationships, database constraints, and business rules before implementation.
+The system is implemented using **Entity Framework Core** with SQL Server.
 
 ---
 
-# Domain Overview
+# Entity Relationship Diagram
 
-The system is divided into two primary domains:
+```mermaid
+erDiagram
 
-## Library Domain
+    ApplicationUser ||--o| Member : owns
 
-Represents assets owned and managed by the library.
+    Member ||--o{ Loan : borrows
+    Member ||--o{ Reservation : reserves
+    Member ||--o{ Bookshelf : owns
+    Member ||--o{ UserBook : reads
 
-- Books
-- Physical Book Copies
-- Authors
-- Publishers
-- Categories
-- Languages
-- Loans
-- Reservations
+    Book ||--o{ BookCopy : has
+    Book ||--o{ BookAuthor : written_by
+    Author ||--o{ BookAuthor : writes
 
----
+    Book ||--o{ Reservation : reserved
 
-## User Domain
+    BookCopy ||--o{ Loan : loaned
 
-Represents a member's personal interaction with books.
+    Publisher ||--o{ Book : publishes
+    Category ||--o{ Book : categorizes
+    Language ||--o{ Book : written_in
 
-- UserBook
-- ReadingProgress
-- BookReview
-- Bookshelf
-- BookshelfBook
+    Book {
+        Guid Id
+        string Title
+        string ISBN
+        int PublicationYear
+        string Description
+        Guid CategoryId
+        Guid PublisherId
+        Guid LanguageId
+    }
 
----
+    Author {
+        Guid Id
+        string DisplayName
+        string Biography
+    }
 
-# High-Level ER Diagram
+    BookAuthor {
+        Guid BookId
+        Guid AuthorId
+    }
 
-```text
-                           ApplicationUser
-                                  │
-                                  │ 1:1
-                                  ▼
-                               Member
-                                  │
-             ┌────────────────────┼────────────────────┐
-             │                    │                    │
-             │                    │                    │
-             ▼                    ▼                    ▼
-           Loan             Reservation           UserBook
-             │                    │                    │
-             │                    │                    ├──────────────┐
-             │                    │                    │              │
-             ▼                    │                    ▼              ▼
-         BookCopy                 │           ReadingProgress    BookReview
-             │                    │
-             │                    │
-             ▼                    ▼
-                           Book
-            ┌──────────────┼──────────────┬──────────────┐
-            │              │              │              │
-            ▼              ▼              ▼              ▼
-         Category      Publisher      Language       BookAuthor
-                                                          │
-                                                          ▼
-                                                       Author
+    BookCopy {
+        Guid Id
+        Guid BookId
+        string Barcode
+        BookCopyStatus Status
+    }
 
-Member
-   │
-   ▼
-Bookshelf
-   │
-   ▼
-BookshelfBook
-   │
-   ▼
-UserBook
+    Member {
+        Guid Id
+        string UserId
+        string FirstName
+        string LastName
+    }
+
+    Loan {
+        Guid Id
+        Guid MemberId
+        Guid BookCopyId
+        datetime BorrowedAt
+        datetime DueAt
+        datetime ReturnedAt
+        LoanStatus Status
+    }
+
+    Reservation {
+        Guid Id
+        Guid MemberId
+        Guid BookId
+        datetime ReservedAt
+        ReservationStatus Status
+    }
+
+    Publisher {
+        Guid Id
+        string Name
+    }
+
+    Category {
+        Guid Id
+        string Name
+    }
+
+    Language {
+        Guid Id
+        string Name
+    }
+
+    Bookshelf {
+        Guid Id
+        Guid MemberId
+        string Name
+    }
+
+    UserBook {
+        Guid Id
+        Guid MemberId
+        Guid BookId
+        UserBookStatus Status
+    }
+
+    ApplicationUser {
+        string Id
+        string Email
+    }
 ```
 
 ---
 
-# Entity Summary
+# Relationship Summary
 
-| Entity | Description |
-|---------|-------------|
-| ApplicationUser | ASP.NET Identity user |
-| Member | Library member profile |
-| Book | Logical book information |
-| BookCopy | Physical copy owned by the library |
-| Author | Book author |
-| BookAuthor | Many-to-many relationship between books and authors |
-| Publisher | Book publisher |
-| Category | Book category |
-| Language | Book language |
-| Loan | Borrowing records |
-| Reservation | Book reservations |
-| UserBook | A member's personal relationship with a book |
-| ReadingProgress | Tracks reading progress |
-| BookReview | Book ratings and reviews |
-| Bookshelf | User-created collection |
-| BookshelfBook | Books assigned to a bookshelf |
+| Relationship          | Cardinality               |
+| --------------------- | ------------------------- |
+| Publisher → Books     | One-to-Many               |
+| Category → Books      | One-to-Many               |
+| Language → Books      | One-to-Many               |
+| Book → BookCopies     | One-to-Many               |
+| Book ↔ Authors        | Many-to-Many (BookAuthor) |
+| Member → Loans        | One-to-Many               |
+| BookCopy → Loans      | One-to-Many               |
+| Member → Reservations | One-to-Many               |
+| Book → Reservations   | One-to-Many               |
+| Member → Bookshelves  | One-to-Many               |
+| Member → UserBooks    | One-to-Many               |
 
 ---
 
-# Relationships
+# Design Notes
 
-## Authentication
-
-ApplicationUser (1) ─────── (1) Member
-
----
-
-## Library
-
-Category (1) ─────── (*) Book
-
-Publisher (1) ─────── (*) Book
-
-Language (1) ─────── (*) Book
-
-Book (1) ─────── (*) BookCopy
-
-Book (*) ─────── (*) Author
-
-(BookAuthor)
+* **Book** represents a bibliographic record, not a physical copy.
+* **BookCopy** represents individual physical copies available for borrowing.
+* **BookAuthor** implements the many-to-many relationship between books and authors.
+* **Loan** references a **BookCopy**, allowing multiple copies of the same title to be borrowed independently.
+* **Reservation** targets a **Book** rather than a specific copy, allowing the system to assign the next available copy in future implementations.
+* **Member** extends an authenticated **ApplicationUser**, separating identity management from library-specific information.
+* Lookup entities (**Category**, **Publisher**, and **Language**) normalize shared metadata and avoid duplication.
 
 ---
 
-## Circulation
+# Current Status
 
-Member (1) ─────── (*) Loan
+Implemented entities:
 
-BookCopy (1) ─────── (*) Loan
+* ✅ ApplicationUser
+* ✅ Member
+* ✅ Book
+* ✅ Author
+* ✅ BookAuthor
+* ✅ BookCopy
+* ✅ Loan
+* ✅ Reservation
+* ✅ Publisher
+* ✅ Category
+* ✅ Language
+* ✅ Bookshelf
+* ✅ UserBook
 
-Member (1) ─────── (*) Reservation
-
-Book (1) ─────── (*) Reservation
-
----
-
-## User Domain
-
-Member (1) ─────── (*) UserBook
-
-Book (1) ─────── (*) UserBook
-
-UserBook (1) ─────── (1) ReadingProgress
-
-UserBook (1) ─────── (0..1) BookReview
-
-Member (1) ─────── (*) Bookshelf
-
-Bookshelf (1) ─────── (*) BookshelfBook
-
-UserBook (1) ─────── (*) BookshelfBook
-
----
-
-# Enumerations
-
-## BookCopyStatus
-
-- Available
-- Borrowed
-- Reserved
-- Lost
-- Maintenance
-
----
-
-## LoanStatus
-
-- Active
-- Returned
-- Overdue
-
----
-
-## ReservationStatus
-
-- Pending
-- Fulfilled
-- Cancelled
-- Expired
-
----
-
-## ReadingStatus
-
-- WantToRead
-- Reading
-- Completed
-- Abandoned
-
----
-
-# Business Rules
-
-- Every Book must belong to one Category.
-- Every Book must belong to one Publisher.
-- Every Book must belong to one Language.
-- A Book may have one or more Authors.
-- A Book may have multiple physical BookCopies.
-- Members borrow BookCopies, not Books.
-- Members reserve Books, not BookCopies.
-- Every UserBook belongs to exactly one Member and one Book.
-- Every UserBook has exactly one ReadingProgress record.
-- A UserBook may have at most one BookReview.
-- A Member may create multiple Bookshelves.
-- A UserBook may belong to multiple Bookshelves.
-
----
-
-# Database Constraints
-
-## Unique
-
-- ISBN
-- Barcode
-- (UserBookId) in BookReview
-
----
-
-# Notes
-
-The domain model has been finalized before implementation.
-
-Future enhancements should not introduce new entities unless:
-
-- Required by business requirements.
-- Required by project requirements.
-- Required to resolve an architectural limitation.
-
-All future schema changes should be reflected in this document before implementation.
+The schema is designed to support future enhancements such as reporting, inventory tracking, overdue processing, and automated reservation fulfillment without major structural changes.
