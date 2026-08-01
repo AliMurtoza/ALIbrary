@@ -2,9 +2,11 @@ export interface Loan {
   id: string;
 
   memberId: string;
-  bookCopyId: string;
+  memberName: string;
 
+  bookCopyId: string;
   bookTitle: string;
+  
   barcode: string;
 
   borrowedAt: string;
