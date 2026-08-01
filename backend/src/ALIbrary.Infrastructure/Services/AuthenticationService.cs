@@ -82,9 +82,12 @@ public class AuthenticationService : IAuthenticationService
             throw new BadRequestException("Invalid email or password.");
         }
 
+        var roles = await _userManager.GetRolesAsync(user);
+
         var token = _jwtTokenService.GenerateToken(
             user.Id,
-            user.Email!);
+            user.Email!,
+            roles);
 
         return new AuthenticationResponse
         {

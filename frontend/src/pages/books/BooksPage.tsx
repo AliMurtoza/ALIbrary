@@ -13,13 +13,22 @@ import {
   Paper,
   TextField,
   Typography,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
 } from "@mui/material";
 
 import { createBook } from "../../services/bookService";
-
 import { getBooks } from "../../services/bookService";
-
 import { Book } from "../../types/Book";
+import { Lookup } from "../../types/Lookup";
+
+import {
+  getPublishers,
+  getLanguages,
+  getCategories,
+} from "../../services/lookupService";
 
 export default function BooksPage() {
   const [books, setBooks] = useState<Book[]>([]);
@@ -34,21 +43,22 @@ export default function BooksPage() {
 
   const [publisherId, setPublisherId] = useState("");
   const [languageId, setLanguageId] = useState("");
+  const [categoryId, setCategoryId] = useState("");
+
+  const [publishers, setPublishers] = useState<Lookup[]>([]);
+  const [languages, setLanguages] = useState<Lookup[]>([]);
+  const [categories, setCategories] = useState<Lookup[]>([]);
 
   const [publishedYear, setPublishedYear] = useState(2026);
 
   async function handleCreate() {
     await createBook({
       title,
-
       isbn,
-
       description,
-
       publisherId,
-
       languageId,
-
+      categoryId,
       publishedYear,
     });
 
@@ -60,9 +70,17 @@ export default function BooksPage() {
   useEffect(() => {
     async function loadBooks() {
       try {
-        const result = await getBooks();
+        const booksResult = await getBooks();
+        setBooks(booksResult);
 
-        setBooks(result);
+        const publishersResult = await getPublishers();
+        setPublishers(publishersResult);
+
+        const languagesResult = await getLanguages();
+        setLanguages(languagesResult);
+
+        const categoriesResult = await getCategories();
+        setCategories(categoriesResult);
       } finally {
         setLoading(false);
       }
@@ -130,21 +148,53 @@ export default function BooksPage() {
             onChange={(e) => setDescription(e.target.value)}
           />
 
-          <TextField
-            fullWidth
-            margin="normal"
-            label="Publisher Id"
-            value={publisherId}
-            onChange={(e) => setPublisherId(e.target.value)}
-          />
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Category</InputLabel>
 
-          <TextField
-            fullWidth
-            margin="normal"
-            label="Language Id"
-            value={languageId}
-            onChange={(e) => setLanguageId(e.target.value)}
-          />
+            <Select
+              value={categoryId}
+              label="Category"
+              onChange={(e) => setCategoryId(e.target.value)}
+            >
+              {categories.map((category) => (
+                <MenuItem key={category.id} value={category.id}>
+                  {category.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Publisher</InputLabel>
+
+            <Select
+              value={publisherId}
+              label="Publisher"
+              onChange={(e) => setPublisherId(e.target.value)}
+            >
+              {publishers.map((publisher) => (
+                <MenuItem key={publisher.id} value={publisher.id}>
+                  {publisher.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Language</InputLabel>
+
+            <Select
+              value={languageId}
+              label="Language"
+              onChange={(e) => setLanguageId(e.target.value)}
+            >
+              {languages.map((language) => (
+                <MenuItem key={language.id} value={language.id}>
+                  {language.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
           <TextField
             fullWidth

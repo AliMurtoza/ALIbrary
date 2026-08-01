@@ -7,6 +7,7 @@ export interface Book {
 
 export interface CreateBookRequest {
     title: string;
+    categoryId: string;
     publisherId: string;
     languageId: string;
     isbn: string;

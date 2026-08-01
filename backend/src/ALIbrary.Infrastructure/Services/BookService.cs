@@ -22,6 +22,7 @@ public class BookService : IBookService
             Title = request.Title,
             PublisherId = request.PublisherId,
             LanguageId = request.LanguageId,
+            CategoryId = request.CategoryId,
             ISBN = request.ISBN,
             PublicationYear = request.PublishedYear,
             Description = request.Description
